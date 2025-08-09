@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aziz Sancar: Seç-Yaşat — Etkileşimli Hikâye</title>
+<style>
+  body { font-family: sans-serif; margin: 0; background: #fafafa; color: #222; }
+  header, footer { background: white; border-bottom: 1px solid #ddd; padding: 10px 16px; position: sticky; top: 0; z-index: 10; }
+  header h1 { font-size: 1.2rem; margin: 0; }
+  main { max-width: 1000px; margin: auto; display: flex; gap: 16px; padding: 16px; }
+  .section { flex: 2; background: white; border-radius: 12px; padding: 16px; border: 1px solid #ddd; }
+  .choices button { display: block; width: 100%; text-align: left; background: white; border: 1px solid #ccc; border-radius: 8px;
+    padding: 10px; margin-top: 8px; cursor: pointer; }
+  .choices button:hover { background: #f5f5f5; }
+  aside { flex: 1; position: sticky; top: 60px; background: white; border-radius: 12px; padding: 16px; border: 1px solid #ddd; height: fit-content; }
+  .trail button { border: 1px solid #ccc; border-radius: 999px; padding: 4px 8px; font-size: 0.8rem; background: white; cursor: pointer; }
+  .trail button:hover { background: #f0f0f0; }
+  .ending { background: #f8f8f8; padding: 10px; margin-top: 16px; border-radius: 8px; border: 1px solid #ddd; font-size: 0.9rem; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Aziz Sancar: Seç-Yaşat — Etkileşimli Hikâye</h1>
+</header>
+
+<main>
+  <div class="section">
+    <h2 id="section-title"></h2>
+    <p id="section-text"></p>
+    <div id="choices" class="choices"></div>
+    <div id="ending" class="ending" style="display:none;"></div>
+  </div>
+
+  <aside>
+    <h3>Yol Haritası</h3>
+    <div class="trail" id="trail"></div>
+    <div style="margin-top:16px; font-size:0.85rem; color:#555;">
+      İpucu: Aynı başlangıçtan farklı seçimler yaparak yeni yollara sapın. Özellikle <b>6, 14, 17, 21</b> numaralı bölümler kritik dönemeçlerdir.
+    </div>
+  </aside>
+</main>
+
+<footer>
+  <small>© 2025 Etkileşimli Hikâye | Eğitim amaçlı üretilmiştir.</small>
+</footer>
+
+<script>
+const story = {
+  "1": { t: "Bölüm 1 — Savur’da İlkbahar", x: "Mardin’in Savur’unda, badem ve erik ağaçları çiçek açıyor. Ailenle tarlada çalışıyor, bir yandan da top peşinde koşuyorsun. Gün batarken bir karar anı:", c: [
+    ["“Ağaçlara ben tırmanırım!”", "2"], ["“Babamla tarlada kalıp işi bitireyim.”", "3"], ["“Bugün kütüphaneden kitap alacağım.”", "4"]
+  ]},
+  "2": { t: "Bölüm 2 — Kalecinin Refleksleri", x: "Futbol sahasında kaledesin. Kritik kurtarışlar özgüven veriyor. Arkadaşların “Takım kaptanı ol!” diyor.", c: [
+    ["“Bilime de vakit ayırayım; kulübe yazılayım.”", "5"], ["“Tam gaz futbol!”", "5"]
+  ]},
+  "3": { t: "Bölüm 3 — Ceviz Hasadı", x: "Sepetler doluyor ama omuzların ağrıyor. Zor iş sorumluluk öğretiyor.", c: [
+    ["“Disiplinimi derse taşıyayım.”", "5"], ["“Akşam yine idman var.”", "5"]
+  ]},
+  "4": { t: "Bölüm 4 — Merakın Kıvılcımı", x: "Okuduğun dergide moleküllerin dünyası seni büyülüyor. “Benzen… DNA…” diye not alıyorsun.", c: [
+    ["“Fen kulübüne katılayım.”", "5"], ["“Şimdilik yalnız çalışayım.”", "5"]
+  ]},
+  "5": { t: "Bölüm 5 — Öğretmenin Sorusu", x: "Kimya öğretmenin sınıfta soruyor: “Aziz, şu bileşik sence nedir?”...", c: [
+    ["“Fen kulübüne düzenli gideceğim.”", "6"], ["“Futbol takımında kaleciyim, ikisini dengeleyeyim.”", "6"], ["“Evde kardeşlere de destek olacağım.”", "6"]
+  ]},
+  "6": { t: "Bölüm 6 — Sınav Kapısı", x: "Üniversite için karar zamanı...", c: [
+    ["“Tıp yazıyorum.”", "7"], ["“Kimya yazıyorum.”", "8"], ["“İkisine de girip bakarım.”", "7"]
+  ]},
+  "7": { t: "Bölüm 7 — Tıp Amfisinde", x: "Çevrende ülkenin en iyileri...", c: [
+    ["“Bölüm başkanıyla konuşayım; temel araştırma istiyorum.”", "9"], ["“Not ortalamasına odaklanırım...”", "10"]
+  ]},
+  "8": { t: "Bölüm 8 — Kimya Amfisinde", x: "Reaksiyonlar, formüller, spektrumlar...", c: [
+    ["“Yurtdışına burs başvuracağım.”", "11"], ["“Türkiye’de laboratuvar kurup ilerleyeyim.”", "10"]
+  ]},
+  "9": { t: "Bölüm 9 — Biyokimya Kıvılcımı", x: "Bölüm başkanı: “Tıp diploması al, sonra temel bilimde uzmanlaş.”", c: [
+    ["“Önce mezun olayım, sonra burs peşine.”", "11"], ["“Şimdilik hekimlik yapayım.”", "10"]
+  ]},
+  "10": { t: "Bölüm 10 — Savur’a Dönüş: Hekimlik", x: "Köyler seni bekliyor...", c: [
+    ["“Köyde kalıp toplum sağlığını güçlendireyim.” (SON C)", "24"], ["“Geceleri mektuplar yazıp burs başvurayım.”", "11"]
+  ]},
+  "11": { t: "Bölüm 11 — Burs Mektupları", x: "Zarf üstüne zarf… Umut ve sabır.", c: [
+    ["“NATO bursu çıktı!”", "12"], ["“Olumsuz geldi… Pes yok.”", "13"]
+  ]},
+  "12": { t: "Bölüm 12 — Baltimore’a Merhaba", x: "Johns Hopkins’te ilk gün...", c: [
+    ["“Kalıp çalışacağım, pes yok.”", "14"], ["“Önce ülkeme dönüp toparlanayım.”", "10"]
+  ]},
+  "13": { t: "Bölüm 13 — Kısa Dolambaç", x: "Kısa süre İngiltere’de dilini güçlendiriyor...", c: [
+    ["“Yeniden başvurdum, laboratuvara!”", "14"], ["“Köyümde hizmete devam.” (SON C)", "24"]
+  ]},
+  "14": { t: "Bölüm 14 — Dr. Rupert’in Laboratuvarı", x: "Konun: DNA onarımı...", c: [
+    ["“Kaynak yoksa da ben enzimi saflaştırırım.”", "15"], ["“Laboratuvar değiştirip daha güvenli bir konuya geçeyim.”", "16"]
+  ]},
+  "15": { t: "Bölüm 15 — Altı Ay, Sayısız Deneme", x: "Defalarca başarısızlık...", c: [
+    ["“Devam! Mekanizmayı çözmeliyim.”", "17"], ["“Yeterli bence, başka yola döneyim.”", "16"]
+  ]},
+  "16": { t: "Bölüm 16 — Güvenli Kıyılar", x: "Klinik hekimliğe dönebilir...", c: [
+    ["“Hekimliğe geri dönüyorum.” (SON C)", "24"], ["“Üniversitede eğitimci-bilim elçisi olacağım.” (SON B)", "25"]
+  ]},
+  "17": { t: "Bölüm 17 — E. coli’de Büyük Kesit", x: "Gözlemin: Hasarlı bölge...", c: [
+    ["“Peki insan hücresinde nasıl?”", "18"], ["“Burada bırakıp derslere yoğunlaşayım.” (SON B)", "25"]
+  ]},
+  "18": { t: "Bölüm 18 — İnsan Hücresinde İz Sürme", x: "Yıllar süren emek...", c: [
+    ["“Fotoliyaz benzeri genler insanda ne yapıyor?”", "19"], ["“Artık dinlenip öğretmeye ağırlık vereyim.” (SON B)", "25"]
+  ]},
+  "19": { t: "Bölüm 19 — Uçakta Bir Makale", x: "Jet-lag üzerine bir yazı...", c: [
+    ["“Sirkadiyen saat proteinlerine dalıyorum.”", "20"], ["“DNA onarımı hattında devam.”", "21"]
+  ]},
+  "20": { t: "Bölüm 20 — Saatin Dişlileri", x: "Aydınlık-karanlık döngüsünü izleyen...", c: [
+    ["“Bulguları birleştirip büyük resmi anlatacağım.”", "21"]
+  ]},
+  "21": { t: "Bölüm 21 — Biriktikçe Ağırlık", x: "DNA onarımı, fotoliyaz...", c: [
+    ["“Stockholm’den telefon…” (SON A)", "22"], ["“Laboratuvarda kalıp gençlere öncelik vereyim.” (SON B)", "25"]
+  ]},
+  "22": { t: "SON A — Nobel Gecesi", x: "Telefon çalıyor: “Tebrikler, Kimya Ödülü’nü kazandınız.”", c: [] },
+  "23": { t: "Alternatif Zafer — Bilim Diplomasisi", x: "Yıllar içinde bir vakıf kurup...", c: [] },
+  "24": { t: "SON C — Anadolu’nun Hekimi", x: "Köylerde doğumlar daha güvenli...", c: [] },
+  "25": { t: "SON B — Efsane Hoca", x: "Amfiler dolu...", c: [
+    ["“Vakıf kur, bilim diplomasisine odaklan.” (Alternatif son)", "23"]
+  ]}
+};
+
+let path = ["1"];
+
+function render() {
+  const id = path[path.length - 1];
+  const sec = story[id];
+  document.getElementById("section-title").textContent = sec.t;
+  document.getElementById("section-text").textContent = sec.x;
+  const ch = document.getElementById("choices");
+  ch.innerHTML = "";
+  sec.c.forEach(([label, to]) => {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.onclick = () => { path.push(to); render(); };
+    ch.appendChild(btn);
+  });
+  const ending = document.getElementById("ending");
+  if (!sec.c.length) {
+    ending.style.display = "block";
+    ending.textContent = `Bir sona ulaştınız. Toplam ${Object.values(story).filter(s=>!s.c.length).length} farklı son vardır.`;
+  } else {
+    ending.style.display = "none";
+  }
+  const trail = document.getElementById("trail");
+  trail.innerHTML = "";
+  path.forEach((pid, i) => {
+    const btn = document.createElement("button");
+    btn.textContent = `${i+1}. ${story[pid].t.split(" — ")[0]}`;
+    btn.onclick = () => { path = path.slice(0, i+1); render(); };
+    trail.appendChild(btn);
+  });
+}
+render();
+</script>
+
+</body>
+</html>
