@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aziz Sancar: Seç-Yaşat — Mobil+ Etkileşimli Hikâye</title>
+<style>
+  :root {
+    --bg: #fafafa;
+    --card: #ffffff;
+    --text: #1f2937; /* gray-800 */
+    --muted: #6b7280; /* gray-500 */
+    --border: #e5e7eb; /* gray-200 */
+    --accent: #2563eb; /* blue-600 */
+    --accent-2: #9333ea; /* purple-600 */
+    --ok: #059669; /* emerald-600 */
+    --warn: #d97706; /* amber-600 */
+    --shadow: 0 6px 24px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1220;
+      --card: #0f172a; /* slate-900 */
+      --text: #e5e7eb; /* gray-200 */
+      --muted: #94a3b8; /* slate-400 */
+      --border: #1f2937; /* gray-800 */
+      --shadow: 0 6px 24px rgba(0,0,0,.5), 0 2px 8px rgba(0,0,0,.35);
+    }
+  }
+  html, body { height: 100%; }
+  body {
+    margin: 0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    background: var(--bg); color: var(--text);
+  }
+  header {
+    position: sticky; top: 0; z-index: 10; backdrop-filter: saturate(1.2) blur(6px);
+    background: color-mix(in oklab, var(--card) 80%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 12px 16px; }
+  h1 { font-size: clamp(18px, 2.5vw, 22px); margin: 0; font-weight: 700; letter-spacing: .2px; }
+  .controls { display: flex; gap: 8px; align-items: center; }
+  .btn {
+    border: 1px solid var(--border); background: var(--card); color: var(--text);
+    padding: 8px 12px; border-radius: 999px; cursor: pointer; transition: transform .05s ease, background .2s ease, border-color .2s ease;
+  }
+  .btn:hover { background: color-mix(in oklab, var(--card), var(--bg) 20%); }
+  .btn:active { transform: translateY(1px) scale(.99); }
+  .btn.primary { border-color: color-mix(in oklab, var(--accent), var(--border) 60%); color: white; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
+
+  main { max-width: 1100px; margin: 0 auto; padding: 16px; display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 880px) {
+    main { grid-template-columns: 2fr 1fr; }
+  }
+
+  .card {
+    background: var(--card); border: 1px solid var(--border); border-radius: 18px; box-shadow: var(--shadow);
+    padding: clamp(16px, 2.5vw, 28px);
+    animation: fadeSlide .35s ease both;
+  }
+  @keyframes fadeSlide { from {opacity: 0; transform: translateY(8px);} to {opacity: 1; transform: none;} }
+
+  .title { font-size: clamp(22px, 3vw, 30px); margin: 0 0 10px; font-weight: 700; }
+  .lead { font-size: clamp(15px, 1.8vw, 17px); color: var(--text); line-height: 1.6; }
+
+  .choices { margin-top: 16px; display: grid; gap: 10px; }
+  .choice {
+    width: 100%; text-align: left; padding: 12px 14px; border: 1px solid var(--border); border-radius: 14px; background: var(--card); cursor: pointer;
+    box-shadow: 0 0 0 rgba(0,0,0,0); transition: box-shadow .2s ease, transform .06s ease, background .2s ease;
+  }
+  .choice:hover { box-shadow: 0 8px 18px rgba(0,0,0,.06); background: color-mix(in oklab, var(--card), var(--bg) 10%); }
+  .choice:active { transform: translateY(1px); }
+  .choice .row { display: flex; align-items: center; gap: 8px; }
+  .pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; font-size: 12px; border: 1px solid var(--border); color: var(--muted); }
+  .to { font-size: 12px; color: var(--muted); }
+  .label { margin-top: 4px; font-size: 16px; }
+
+  aside .stats { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; margin-top: 12px; }
+  .stat { text-align: center; border: 1px solid var(--border); border-radius: 12px; padding: 10px; }
+  .stat .num { font-weight: 800; font-size: 22px; }
+  .hint { margin-top: 12px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { border: 1px solid var(--border); background: var(--card); border-radius: 999px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+  .chip:hover { background: color-mix(in oklab, var(--card), var(--bg) 10%); }
+
+  .endingBox { margin-top: 16px; border: 1px solid var(--border); background: color-mix(in oklab, var(--card), var(--bg) 15%); border-radius: 14px; padding: 12px; font-size: 14px; }
+  .kbd { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size: 12px; border: 1px solid var(--border); border-radius: 6px; padding: 2px 6px; }
+
+  footer { max-width: 1100px; margin: 0 auto; padding: 8px 16px 20px; color: var(--muted); font-size: 12px; }
+
+  /* Mobile bottom bar */
+  .bottombar { position: sticky; bottom: 0; z-index: 9; background: color-mix(in oklab, var(--card) 92%, transparent); border-top: 1px solid var(--border); display: flex; gap: 8px; padding: 10px 16px; }
+  @media (min-width: 880px) { .bottombar { display: none; } }
+
+  /* Toast */
+  .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--card); border: 1px solid var(--border); padding: 10px 14px; border-radius: 999px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .25s ease, translate .25s ease; }
+  .toast.show { opacity: 1; }
+
+  /* Reduce motion respect */
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+      <h1>Aziz Sancar: Seç-Yaşat — Etkileşimli Hikâye</h1>
+      <div class="controls">
+        <button id="btn-back" class="btn" title="Geri (Backspace)">Geri</button>
+        <button id="btn-restart" class="btn" title="Başa dön (R)">Başa Dön</button>
+        <button id="btn-share" class="btn primary" title="Bağlantıyı kopyala">Paylaş</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="card" class="card" aria-live="polite" aria-atomic="true">
+      <h2 id="section-title" class="title"></h2>
+      <p id="section-text" class="lead"></p>
+      <div id="choices" class="choices"></div>
+      <div id="ending" class="endingBox" style="display:none;"></div>
+    </section>
+
+    <aside class="card" style="position:sticky; top:72px; height: fit-content;">
+      <h3 style="margin:0 0 10px; font-size:18px;">Yol Haritası</h3>
+      <div id="trail" class="chips"></div>
+      <div class="stats">
+        <div class="stat"><div class="num" id="steps">1</div><div style="font-size:12px;color:var(--muted)">Adım</div></div>
+        <div class="stat"><div class="num" id="endingsCount">—</div><div style="font-size:12px;color:var(--muted)">Farklı Son</div></div>
+      </div>
+      <div class="hint">
+        Klavye: <span class="kbd">1..9</span> seçim, <span class="kbd">Backspace</span> geri, <span class="kbd">R</span> başa dön. Özellikle <b>6, 14, 17, 21</b> dönemeçtir.
+      </div>
+    </aside>
+  </main>
+
+  <div class="bottombar">
+    <button id="mb-back" class="btn" style="flex:1">Geri</button>
+    <button id="mb-restart" class="btn" style="flex:1">Başa Dön</button>
+    <button id="mb-share" class="btn primary" style="flex:1">Paylaş</button>
+  </div>
+
+  <footer>
+    <small>© <span id="year"></span> Etkileşimli Hikâye · Eğitim amaçlı üretilmiştir.</small>
+  </footer>
+
+  <div id="toast" class="toast" role="status" aria-live="polite">Bağlantı kopyalandı</div>
+
+<script>
+// --- HİKÂYE VERİSİ ---
+const story = {
+  "1": { t: "Bölüm 1 — Savur’da İlkbahar", x: "Mardin’in Savur’unda, badem ve erik ağaçları çiçek açıyor. Ailenle tarlada çalışıyor, bir yandan da top peşinde koşuyorsun. Gün batarken bir karar anı:", c: [
+    ["Ağaçlara ben tırmanırım!", "2", "eylem"], ["Babamla tarlada kalıp işi bitireyim.", "3", "eylem"], ["Bugün kütüphaneden kitap alacağım.", "4", "yer"]
+  ]},
+  "2": { t: "Bölüm 2 — Kalecinin Refleksleri", x: "Futbol sahasında kaledesin. Kritik kurtarışlar özgüven veriyor. Arkadaşların ‘Takım kaptanı ol!’ diyor.", c: [
+    ["Bilime de vakit ayırayım; kulübe yazılayım.", "5", "eylem"], ["Tam gaz futbol!", "5", "eylem"]
+  ]},
+  "3": { t: "Bölüm 3 — Ceviz Hasadı", x: "Sepetler doluyor ama omuzların ağrıyor. Zor iş sorumluluk öğretiyor.", c: [
+    ["Disiplinimi derse taşıyayım.", "5", "eylem"], ["Akşam yine idman var.", "5", "eylem"]
+  ]},
+  "4": { t: "Bölüm 4 — Merakın Kıvılcımı", x: "Okuduğun dergide moleküllerin dünyası seni büyülüyor. ‘Benzen… DNA…’ diye not alıyorsun.", c: [
+    ["Fen kulübüne katılayım.", "5", "eylem"], ["Şimdilik yalnız çalışayım.", "5", "eylem"]
+  ]},
+  "5": { t: "Bölüm 5 — Öğretmenin Sorusu", x: "Kimya öğretmenin sınıfta soruyor: ‘Aziz, şu bileşik sence nedir?’ Cevap veriyorsun; sınıfta bir kıpırtı. Öğretmen: ‘İsteyince yaparsın.’", c: [
+    ["Fen kulübüne düzenli gideceğim.", "6", "eylem"], ["Futbol takımında kaleciyim, ikisini dengeleyeyim.", "6", "eylem"], ["Evde kardeşlere de destek olacağım.", "6", "eylem"]
+  ]},
+  "6": { t: "Bölüm 6 — Sınav Kapısı", x: "Üniversite için karar zamanı. Arkadaşların ‘Tıp’a beraber girelim’ diyor; sen kimyayı da seviyorsun.", c: [
+    ["Tıp yazıyorum.", "7", "karar"], ["Kimya yazıyorum.", "8", "karar"], ["İkisine de girip bakarım.", "7", "karar"]
+  ]},
+  "7": { t: "Bölüm 7 — Tıp Amfisinde", x: "Çevrende ülkenin en iyileri. Başarısızlık korkusu kıpırdıyor ama merakın daha güçlü. Biyokimya dersi dikkatini çekiyor.", c: [
+    ["Bölüm başkanıyla konuşayım; temel araştırma istiyorum.", "9", "diyalog"], ["Not ortalamasına odaklanırım, laboratuvara sonra bakarım.", "10", "eylem"]
+  ]},
+  "8": { t: "Bölüm 8 — Kimya Amfisinde", x: "Reaksiyonlar, formüller, spektrumlar… Bir hocan, ‘Burs arıyorsan uluslararası başvur’ diyor.", c: [
+    ["Yurtdışına burs başvuracağım.", "11", "eylem"], ["Türkiye’de laboratuvar kurup ilerleyeyim.", "10", "eylem"]
+  ]},
+  "9": { t: "Bölüm 9 — Biyokimya Kıvılcımı", x: "Bölüm başkanı: ‘Tıp diploması al, sonra temel bilimde uzmanlaş.’ Aklına kazınıyor.", c: [
+    ["Önce mezun olayım, sonra burs peşine.", "11", "eylem"], ["Şimdilik hekimlik yapayım.", "10", "eylem"]
+  ]},
+  "10": { t: "Bölüm 10 — Savur’a Dönüş: Hekimlik", x: "Köyler seni bekliyor. İlaç taşıyor, uzak mezralara gidiyorsun. İnsanların gözünde ilk doktor.", c: [
+    ["Köyde kalıp toplum sağlığını güçlendireyim. (SON C)", "24", "karar"], ["Geceleri mektuplar yazıp burs başvurayım.", "11", "eylem"]
+  ]},
+  "11": { t: "Bölüm 11 — Burs Mektupları", x: "Zarf üstüne zarf… Umut ve sabır.", c: [
+    ["NATO bursu çıktı!", "12", "olay"], ["Olumsuz geldi… Pes yok.", "13", "olay"]
+  ]},
+  "12": { t: "Bölüm 12 — Baltimore’a Merhaba", x: "Johns Hopkins’te ilk gün. İngilizce aksan, hızlı konuşmalar… Zorlanıyorsun.", c: [
+    ["Kalıp çalışacağım, pes yok.", "14", "eylem"], ["Önce ülkeme dönüp toparlanayım.", "10", "eylem"]
+  ]},
+  "13": { t: "Bölüm 13 — Kısa Dolambaç", x: "Kısa süre İngiltere’de dilini güçlendiriyor, sonra tekrar şansını deniyorsun.", c: [
+    ["Yeniden başvurdum, laboratuvara!", "14", "eylem"], ["Köyümde hizmete devam. (SON C)", "24", "eylem"]
+  ]},
+  "14": { t: "Bölüm 14 — Dr. Rupert’in Laboratuvarı", x: "Konun: DNA onarımı; özellikle ışıkla çalışan fotoliyaz. Finans az, motivasyon yüksek.", c: [
+    ["Kaynak yoksa da ben enzimi saflaştırırım.", "15", "eylem"], ["Laboratuvar değiştirip daha güvenli bir konuya geçeyim.", "16", "eylem"]
+  ]},
+  "15": { t: "Bölüm 15 — Altı Ay, Sayısız Deneme", x: "Defalarca başarısızlık… Sonunda fotoliyaz genini klonlamayı başarıyorsun. Bir kapı daha açıldı.", c: [
+    ["Devam! Mekanizmayı çözmeliyim.", "17", "eylem"], ["Yeterli bence, başka yola döneyim.", "16", "eylem"]
+  ]},
+  "16": { t: "Bölüm 16 — Güvenli Kıyılar", x: "Klinik hekimliğe dönebilir ya da ders vermeyi seçebilirsin.", c: [
+    ["Hekimliğe geri dönüyorum. (SON C)", "24", "karar"], ["Üniversitede eğitimci-bilim elçisi olacağım. (SON B)", "25", "karar"]
+  ]},
+  "17": { t: "Bölüm 17 — E. coli’de Büyük Kesit", x: "Gözlemin: Hasarlı bölge 12–13 nükleotitlik bir parça olarak kesilip çıkarılıyor. Dünyan genişliyor.", c: [
+    ["Peki insan hücresinde nasıl?", "18", "soru"], ["Burada bırakıp derslere yoğunlaşayım. (SON B)", "25", "eylem"]
+  ]},
+  "18": { t: "Bölüm 18 — İnsan Hücresinde İz Sürme", x: "Yıllar süren emek: Hasarlı bölgenin 27–30 nükleotitlik bir parça halinde kesilip atıldığını gösteriyorsun.", c: [
+    ["Fotoliyaz benzeri genler insanda ne yapıyor?", "19", "soru"], ["Artık dinlenip öğretmeye ağırlık vereyim. (SON B)", "25", "eylem"]
+  ]},
+  "19": { t: "Bölüm 19 — Uçakta Bir Makale", x: "Jet-lag üzerine bir yazı okurken aklına çakıyor: Biyolojik saati düzenleyen proteinlerle fotoliyaz akrabalığı olabilir mi?", c: [
+    ["Sirkadiyen saat proteinlerine dalıyorum.", "20", "karar"], ["DNA onarımı hattında devam.", "21", "karar"]
+  ]},
+  "20": { t: "Bölüm 20 — Saatin Dişlileri", x: "Aydınlık-karanlık döngüsünü izleyen saat proteinlerini izole edip ilişkileri çözümlüyorsun. Alanlar arası bir köprü kuruyorsun.", c: [
+    ["Bulguları birleştirip büyük resmi anlatacağım.", "21", "eylem"]
+  ]},
+  "21": { t: "Bölüm 21 — Biriktikçe Ağırlık", x: "DNA onarımı, fotoliyaz çalışmaları ve biyolojik saat taşları yerine oturuyor. Dünyadan davetler yağıyor.", c: [
+    ["Stockholm’den telefon… (SON A)", "22", "olay"], ["Laboratuvarda kalıp gençlere öncelik vereyim. (SON B)", "25", "eylem"]
+  ]},
+  "22": { t: "SON A — Nobel Gecesi", x: "Telefon çalıyor: ‘Tebrikler, Kimya Ödülü’nü kazandınız.’ Sahneye yürürken aklında üç ilke var: Çok çalışmak, bilgiye dayalı yaratıcılık, pes etmemek.", c: [], end: true },
+  "23": { t: "Alternatif Zafer — Bilim Diplomasisi", x: "Yıllar içinde bir vakıf kurup gençlere burs veriyor, laboratuvarlar arası köprüler kuruyorsun. Ölçülebilir etki: Yüzlerce öğrenci bilime kazandırılıyor.", c: [], end: true },
+  "24": { t: "SON C — Anadolu’nun Hekimi", x: "Köylerde doğumlar daha güvenli, salgınlar daha hızlı kontrol altında. Birçok çocuğun ilk stetoskopla tanıştığı günün kahramanısın. Bilimsel keşifler yerine toplum sağlığını seçtin; etkisi uzun ve derin.", c: [], end: true },
+  "25": { t: "SON B — Efsane Hoca", x: "Amfiler dolu. Deney setlerini kuruyor, gençleri araştırmaya çekiyorsun. Belki büyük ödül yok; ama binlerce yeni merak filizleniyor. Bilimin görünmeyen kahramanısın.", c: [["Vakıf kur, bilim diplomasisine odaklan. (Alternatif son)", "23", "eylem"]], end: true }
+};
+
+const START = "1";
+let path = [START];
+const endingsTotal = Object.values(story).filter(s => s.end || (s.c && s.c.length === 0)).length;
+
+// --- YARDIMCILAR ---
+const el = (id) => document.getElementById(id);
+function typePill(t){ const map={eylem:"Eylem", diyalog:"Diyalog", yer:"Yer", karar:"Karar", olay:"Olay", soru:"Soru"}; return map[t]||t||"Seçim"; }
+function save(){ try{ localStorage.setItem("aziz_sancar_path", JSON.stringify(path)); }catch(_){}}
+function load(){ try{ const q = new URLSearchParams(location.search).get("path"); if(q){ const parts = q.split("-").filter(Boolean); if(parts.every(k=>story[k])) return parts; }
+  const s = localStorage.getItem("aziz_sancar_path"); if(s){ const arr = JSON.parse(s); if(Array.isArray(arr) && arr.every(k=>story[k])) return arr; }
+} catch(_){} return [START]; }
+function updateURL(){ const q = path.join("-"); history.replaceState(null, "", `${location.pathname}?path=${q}`); }
+function showToast(msg){ const t = el("toast"); t.textContent = msg; t.classList.add("show"); setTimeout(()=>t.classList.remove("show"), 1300); }
+
+// --- GEZİNME ---
+function goTo(to){ path.push(to); render(true); }
+function goBack(){ if(path.length>1){ path.pop(); render(true); } }
+function restart(){ path = [START]; render(true); }
+function jumpTo(index){ path = path.slice(0, index+1); render(true); }
+
+// --- RENDER ---
+function render(scrollTop){
+  const id = path[path.length-1];
+  const s = story[id];
+  el("section-title").textContent = s.t;
+  el("section-text").textContent = s.x;
+
+  const ch = el("choices"); ch.innerHTML = "";
+  (s.c||[]).forEach(([label, to, type])=>{
+    const btn = document.createElement("button");
+    btn.className = "choice";
+    btn.innerHTML = `<div class="row"><span class="pill">${typePill(type)}</span><span class="to">→ Bölüm ${to}</span></div><div class="label">${label}</div>`;
+    btn.addEventListener("click", ()=> goTo(to));
+    ch.appendChild(btn);
+  });
+
+  const ending = el("ending");
+  const isEnd = s.end || (s.c && s.c.length === 0);
+  if(isEnd){
+    ending.style.display = "block";
+    ending.innerHTML = `<strong>Bir sona ulaştınız.</strong><br/>Farklı yollar deneyin: <span class="kbd">Geri</span> veya <span class="kbd">Başa Dön</span> ile yeniden başlayın. Bu hikâyede <b>${endingsTotal}</b> farklı son var.`;
+  } else { ending.style.display = "none"; }
+
+  // Trail
+  const trail = el("trail"); trail.innerHTML = "";
+  path.forEach((pid, i)=>{
+    const b = document.createElement("button");
+    b.className = "chip";
+    const title = story[pid].t.split(" — ")[0];
+    b.textContent = `${i+1}. ${title}`;
+    b.title = `Bölüm ${pid}`;
+    b.addEventListener("click", ()=> jumpTo(i));
+    trail.appendChild(b);
+  });
+
+  // Stats + housekeeping
+  el("steps").textContent = path.length;
+  el("endingsCount").textContent = endingsTotal;
+  save(); updateURL();
+  if(scrollTop){ window.scrollTo({top:0, behavior:"smooth"}); }
+}
+
+// --- PAYLAŞ ---
+async function share(){
+  const url = location.href;
+  try {
+    await navigator.clipboard.writeText(url);
+    showToast("Bağlantı kopyalandı");
+  } catch(e){
+    showToast("Kopyalama desteklenmiyor");
+  }
+}
+
+// --- KLAVYE ---
+function onKey(e){
+  // R: restart, Backspace: back, 1..9: choice
+  if(e.key === 'r' || e.key === 'R'){ e.preventDefault(); return restart(); }
+  if(e.key === 'Backspace'){ e.preventDefault(); return goBack(); }
+  const n = Number(e.key);
+  if(Number.isInteger(n) && n>=1 && n<=9){
+    const id = path[path.length-1]; const s = story[id];
+    const i = n-1; if(s.c && s.c[i]){ e.preventDefault(); return goTo(s.c[i][1]); }
+  }
+}
+
+// --- BAŞLAT ---
+(function init(){
+  document.getElementById('year').textContent = new Date().getFullYear();
+  path = load();
+  render(false);
+
+  // header controls
+  el('btn-back').onclick = goBack;
+  el('btn-restart').onclick = restart;
+  el('btn-share').onclick = share;
+  // mobile bar
+  el('mb-back').onclick = goBack;
+  el('mb-restart').onclick = restart;
+  el('mb-share').onclick = share;
+
+  // keyboard
+  window.addEventListener('keydown', onKey);
+
+  // handle browser back/forward if URL changes externally
+  window.addEventListener('popstate', ()=>{ path = load(); render(false); });
+})();
+</script>
+</body>
+</html>
